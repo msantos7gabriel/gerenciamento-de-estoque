@@ -8,6 +8,7 @@ typedef struct {
     int quantidade;
 } Produto;
 
-void cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade);
+int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade);
+void listarProdutos(Produto *Produtos, int tamanho, int indice);
 
 #endif

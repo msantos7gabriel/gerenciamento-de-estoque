@@ -4,7 +4,7 @@
 
 int proximoId = 1;
 
-void cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade) {
+int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade) {
 
     if (*tamanho == *capacidade) {
 
@@ -37,4 +37,19 @@ void cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade) {
     (*tamanho)++;
 
     printf("Produto cadastrado com sucesso!\n");
+    printf("\n");
+
+    return 0;
+}
+
+void listarProdutos(Produto *produtos, int tamanho, int indice){
+    if (indice == tamanho) return;
+
+    printf("ID: %d\n", produtos[indice].id_produto);
+    printf("Nome: %s\n", produtos[indice].nome);
+    printf("Preco: %.2f\n", produtos[indice].preco);
+    printf("Quantidade: %d\n", produtos[indice].quantidade);
+    printf("\n");
+
+    listarProdutos(produtos, tamanho, indice + 1);
 }
