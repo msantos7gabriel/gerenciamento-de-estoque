@@ -53,3 +53,28 @@ void listarProdutos(Produto *produtos, int tamanho, int indice){
 
     listarProdutos(produtos, tamanho, indice + 1);
 }
+
+int deletarProduto(Produto *produtos, int *tamanho, int id) {
+
+    int indiceEncontrado = -1;
+
+    for (int i = 0; i < *tamanho; i++) {
+         if (produtos[i].id_produto == id) {
+            indiceEncontrado = i;
+            break;
+         }
+    }
+
+    if (indiceEncontrado == -1) {
+        return 0; 
+    }
+
+    for (int i = indiceEncontrado; i < *tamanho - 1; i++) {
+        produtos[i] = produtos[i + 1];
+    }
+
+    (*tamanho)--;
+
+    return 1;
+
+}
