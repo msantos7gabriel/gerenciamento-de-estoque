@@ -11,5 +11,6 @@ typedef struct {
 int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade);
 void listarProdutos(Produto *Produtos, int tamanho, int indice);
 int deletarProduto(Produto *produtos, int *tamanho, int id);
+int buscarProdutoPorId(Produto *produtos, int inicio, int fim, int id);
 
 #endif
