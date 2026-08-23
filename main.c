@@ -8,8 +8,6 @@ int main()
     Produto *produtos = NULL;
 
     int tamanho = 0;
-    int capacidade = 0;
-
     int opcao;
     int idParaDeletar;
     int idParaBuscar;
@@ -45,7 +43,7 @@ int main()
 
         case 1:
         {
-            int resultado = cadastrarProduto(&produtos, &tamanho, &capacidade);
+            int resultado = cadastrarProduto(&produtos, &tamanho);
 
             if (resultado == 500)
             {
