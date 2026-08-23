@@ -4,27 +4,23 @@
 
 int proximoId = 1;
 
-int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade)
-{
+int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade) {
 
-    if (*tamanho == *capacidade)
-    {
+    if (*tamanho == *capacidade) {
 
-        if (*capacidade == 0)
-            *capacidade = 3;
-        else
-            *capacidade = *capacidade * 2;
+        if (*capacidade == 0) *capacidade = 3;
+        else *capacidade = *capacidade * 2; 
 
         Produto *temp = realloc(*produtos, *capacidade * sizeof(Produto));
 
-        if (temp == NULL)
-        {
+        if (temp == NULL) {
             printf("Erro ao alocar memoria!\n");
             return 500;
         }
 
         *produtos = temp;
     }
+
 
     (*produtos)[*tamanho].id_produto = proximoId;
     proximoId++;
@@ -46,10 +42,8 @@ int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade)
     return 0;
 }
 
-void listarProdutos(Produto *produtos, int tamanho, int indice)
-{
-    if (indice == tamanho)
-        return;
+void listarProdutos(Produto *produtos, int tamanho, int indice){
+    if (indice == tamanho) return;
 
     printf("ID: %d\n", produtos[indice].id_produto);
     printf("Nome: %s\n", produtos[indice].nome);
@@ -60,83 +54,49 @@ void listarProdutos(Produto *produtos, int tamanho, int indice)
     listarProdutos(produtos, tamanho, indice + 1);
 }
 
-int deletarProduto(Produto *produtos, int *tamanho, int id)
-{
+int deletarProduto(Produto *produtos, int *tamanho, int id) {
 
     int indiceEncontrado = -1;
 
-    for (int i = 0; i < *tamanho; i++)
-    {
-        if (produtos[i].id_produto == id)
-        {
-            indiceEncontrado = i;
+    for (int i = 0; i < *tamanho; i++) {
+         if (produtos[i].id_produto == id) { indiceEncontrado = i;
             break;
-        }
+         }
     }
 
-    if (indiceEncontrado == -1)
-    {
-        return 0;
+    if (indiceEncontrado == -1) {
+        return 0; 
     }
 
-    for (int i = indiceEncontrado; i < *tamanho - 1; i++)
-    {
+    for (int i = indiceEncontrado; i < *tamanho - 1; i++) {
         produtos[i] = produtos[i + 1];
     }
 
     (*tamanho)--;
 
     return 1;
+
 }
 
-int buscarProdutoPorId(Produto *produtos, int inicio, int fim, int id)
-{
+int buscarProdutoPorId(Produto *produtos, int inicio, int fim, int id) {
 
-    if (inicio > fim)
-    {
+    if (inicio > fim) {
         return -1;
     }
 
     int meio = inicio + (fim - inicio) / 2;
 
-    if (id == produtos[meio].id_produto)
-    {
+    if (id == produtos[meio].id_produto) {
         return meio;
-    }
+    } 
 
-    if (id < produtos[meio].id_produto)
-    {
-
+    if (id < produtos[meio].id_produto) {
+        
         return buscarProdutoPorId(produtos, inicio, meio - 1, id);
-    }
-    else
-    {
+
+    } else {
 
         return buscarProdutoPorId(produtos, meio + 1, fim, id);
     }
-}
-
-float somaProduto(Produto **produtos, int *tamanho)
-{
-
-    if (*produtos == NULL)
-    {
-        printf("Não há produtos cadastrados para realizar o calculo\n\n");
-        return 1;
-    }
-    if (*tamanho == 0)
-    {
-        return 0;
-    }
-
-    int indice_atual = *tamanho - 1;
-
-    float valor_atual = (*produtos)[indice_atual].preco * (*produtos)[indice_atual].quantidade;
-
-    // Para Não alterar o valor da main
-    int novo_tamanho = indice_atual;
-
-    float soma = valor_atual + somaProduto(produtos, &novo_tamanho);
-
-    return soma;
+    
 }
