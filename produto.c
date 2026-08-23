@@ -78,3 +78,26 @@ int deletarProduto(Produto *produtos, int *tamanho, int id) {
     return 1;
 
 }
+
+int buscarProdutoPorId(Produto *produtos, int inicio, int fim, int id) {
+
+    if (inicio > fim) {
+        return -1;
+    }
+
+    int meio = inicio + (fim - inicio) / 2;
+
+    if (id == produtos[meio].id_produto) {
+        return meio;
+    } 
+
+    if (id < produtos[meio].id_produto) {
+        
+        return buscarProdutoPorId(produtos, inicio, meio - 1, id);
+
+    } else {
+
+        return buscarProdutoPorId(produtos, meio + 1, fim, id);
+    }
+    
+}
