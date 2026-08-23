@@ -1,4 +1,3 @@
-# gerenciamento-de-estoque
 # Gerenciamento de Estoque de Produtos
 
 Projeto desenvolvido em C para a disciplina de **Estrutura de Dados**, com foco em **Structs, Alocação Dinâmica de Memória e Recursão**.
