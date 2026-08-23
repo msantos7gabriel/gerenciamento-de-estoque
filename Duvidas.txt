@@ -1,3 +1,0 @@
-Duvidas:
-    - Pode realocar o valor de um vetor sem ter feito o malloc ? 
-

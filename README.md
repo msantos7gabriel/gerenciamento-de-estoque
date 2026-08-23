@@ -2,28 +2,34 @@
 
 Projeto desenvolvido em C para a disciplina de **Estrutura de Dados**, com foco em **Structs, Alocação Dinâmica de Memória e Recursão**.
 
-O sistema simula o gerenciamento do estoque de uma loja, permitindo cadastrar, remover, listar, buscar produtos por ID, somar estoque e ordenar por preço.
+O sistema simula o gerenciamento do estoque de uma loja, permitindo cadastrar, remover, listar, buscar produtos por ID, somar o valor total do estoque e ordenar por preço.
+
+## Autores
+* <a href="https://github.com/baianoo-cmd" target="_blank">Enzo Gabriel Lima Dias</a>
+
+* <a href="https://github.com/msantos7gabriel" target="_blank">Gabriel Montalvão Santos</a>
+
+* <a href="https://github.com/geovane-nves" target="_blank">Geovane Neves Rodrigues</a>
 
 ## 1. Objetivo
 
 O projeto tem como objetivo aplicar, de forma integrada, os seguintes conceitos:
-
 * `struct` para organização dos dados dos produtos;
 * alocação dinâmica de memória;
-* utilização de `realloc` para redimensionamento do vetor;
-* utilização de `free` para liberação da memória;
-* funções recursivas;
-* busca recursiva por ID;
-* organização do código em arquivos `.h` e `.c`.
+* utilização de `realloc` para redimensionamento do vetor a cada novo item;
+* utilização de `free` para liberação da memória ao encerrar;
+* funções recursivas (listagem, busca e soma);
+* busca binária recursiva por ID;
+* algoritmo de ordenação (Bubble Sort);
+* organização do código em múltiplos arquivos (`.h` e `.c`).
 
 Cada produto possui:
-
-* ID único;
+* ID único (gerado de forma auto-incremental);
 * nome;
 * preço;
 * quantidade em estoque.
 
-## 2. Organização dos arquivos
+## 2. Organização dos Arquivos
 
 O projeto está dividido em três arquivos principais:
 
@@ -35,152 +41,105 @@ O projeto está dividido em três arquivos principais:
 
 ### `produto.h`
 
-É o arquivo de cabeçalho do módulo de produtos.
-
-Nele está definida a estrutura `Produto` e estão declaradas as funções utilizadas pelo restante do programa.
-
-Principais funções declaradas:
-
-* `cadastrarProduto()`
-* `listarProdutos()`
-* `deletarProduto()`
-* `buscarProdutoPorId()`
-* `ordenarProdutosPreco()`
-* `somaProduto()`
-
+É o arquivo de cabeçalho do módulo de produtos. Nele está definida a estrutura `Produto` e estão declaradas as assinaturas das funções utilizadas pelo restante do programa.
 
 ### `produto.c`
 
-Contém a implementação das funções relacionadas aos produtos.
+Contém a implementação da lógica de negócios e as funções operacionais do sistema.
+Responsabilidades:
 
-Responsabilidades atuais:
-
-* cadastrar produtos;
-* aumentar dinamicamente a capacidade do vetor;
-* listar produtos utilizando recursão;
-* remover produtos pelo ID;
-* buscar produtos pelo ID utilizando busca binária recursiva;
-* filtragem por ordem de preço;
-* soma dos produtos em estoque.
+* **`cadastrarProduto()`**: aumenta dinamicamente a capacidade do vetor e insere os dados.
+* **`listarProdutos()`**: lista os produtos utilizando recursão, sem laços de repetição.
+* **`deletarProduto()`**: remove produtos pelo ID e desloca os elementos subsequentes.
+* **`buscarProdutoPorId()`**: encontra produtos de forma eficiente utilizando busca binária recursiva.
+* **`ordenarProdutosPreco()`**: exibe os itens ordenados pelo preço utilizando um vetor dinâmico auxiliar.
+* **`somaProduto()`**: calcula recursivamente o valor total financeiro dos produtos em estoque.
 
 ### `main.c`
 
-É responsável pelo fluxo principal do programa e pela interação com o usuário.
+É responsável pelo fluxo principal do programa e pela interação com o usuário através de um menu interativo, além de garantir a liberação final da memória (`free(produtos)`).
 
-Atualmente possui um menu em modo texto com as operações:
-
-```text
-1 - Cadastrar produto
-2 - Remover produto
-3 - Listar produtos
-4 - Buscar produto por ID
-5 - Ordenar produtos por preço
-6 - Calcular valor total do estoque
-0 - Sair
-```
-
-## 3. Alocação dinâmica
+## 3. Alocação Dinâmica
 
 Os produtos são armazenados em um vetor alocado dinamicamente.
-
-Inicialmente:
+Inicialmente, o vetor começa vazio:
 
 ```c
 Produto *produtos = NULL;
 int tamanho = 0;
-int capacidade = 0;
 ```
 
-Quando não existe espaço disponível, a capacidade do vetor é aumentada utilizando `realloc`.
+A cada novo cadastro, não há desperdício de memória. O tamanho do vetor é incrementado em exata 1 posição utilizando `realloc`:
 
-A capacidade começa em 1 posições e, quando necessário, é incrementada:
-
-```text
-1 → 2 → 3 → 4 → ...
+```c
+Produto *temp = realloc(*produtos, (*tamanho + 1) * sizeof(Produto));
 ```
 
-A variável `tamanho` representa a quantidade de produtos atualmente cadastrados, enquanto `capacidade` representa a quantidade de posições disponíveis no vetor.
-
-Ao finalizar o programa, a memória utilizada pelo vetor é liberada com:
+A variável `tamanho` representa a quantidade exata de produtos atualmente cadastrados. Ao finalizar o programa (opção `0` do menu), toda a memória utilizada pelo vetor é devolvida ao sistema operacional com:
 
 ```c
 free(produtos);
 ```
 
-## 4. Recursão
+## 4. Recursão e Ordenação
 
-O projeto utiliza funções recursivas em operações que percorrem ou pesquisam o vetor.
+O projeto utiliza funções recursivas em operações que percorrem, pesquisam ou calculam valores no vetor.
 
-### Listagem
+* **Listagem:** A função `listarProdutos()` percorre os produtos recursivamente. O caso base ocorre quando o índice alcança o `tamanho` do vetor. Caso contrário, imprime o produto e chama a si mesma para o próximo índice.
+* **Busca por ID:** A função `buscarProdutoPorId()` implementa uma busca binária recursiva. A cada chamada, verifica o elemento central do intervalo:
+* se for o ID procurado, retorna o índice;
+* se for menor, continua a busca recursiva na metade esquerda;
+* se for maior, continua na metade direita.
 
-A função `listarProdutos()` percorre os produtos recursivamente.
 
-O caso base ocorre quando o índice chega ao tamanho do vetor:
+* **Soma do Estoque:** A função `somaProduto()` calcula o montante total somando o valor do produto atual (preço × quantidade) ao retorno da mesma função chamada para o restante do vetor.
+* **Ordenação Inteligente:** A função `ordenarProdutosPreco()` (Bubble Sort) aloca um vetor dinâmico auxiliar para realizar a ordenação visual por preço. Isso garante que o vetor original, na função `main`, continue ordenado por ID, preservando o funcionamento da busca binária.
 
-```c
-if (indice == tamanho)
-    return;
-```
+## 5. Tratamento de Erros
 
-Caso ainda existam produtos, a função exibe o produto atual e chama a si mesma com o próximo índice.
+O programa possui tratamentos robustos para diversas situações, incluindo:
 
-### Busca por ID
+* falha na alocação de memória (se `realloc` ou `malloc` retornarem `NULL`);
+* tentativa de remover ou buscar um produto inexistente;
+* tentativa de listar, buscar ou somar quando o estoque está vazio;
+* opções inválidas no menu numérico;
+* entradas inválidas de texto onde se esperam números (tratamento no `scanf`).
 
-A função `buscarProdutoPorId()` utiliza uma busca binária recursiva.
+## 6. Como Compilar e Executar
 
-A busca trabalha com um intervalo definido por `inicio` e `fim`.
+O projeto pode ser compilado utilizando o compilador GCC. Siga as instruções correspondentes ao seu sistema operacional:
 
-A cada chamada:
+### Em ambientes Linux
 
-* se o ID for encontrado, retorna seu índice;
-* se o ID procurado for menor que o elemento do meio, continua na metade esquerda;
-* se for maior, continua na metade direita;
-* se `inicio` ultrapassar `fim`, o produto não foi encontrado e a função retorna `-1`.
-
-## 5. Tratamento de erros
-
-O programa possui tratamentos para algumas situações de erro, incluindo:
-
-* falha na alocação de memória com `realloc`;
-* tentativa de remover um produto inexistente;
-* tentativa de buscar um produto inexistente;
-* tentativa de realizar operações quando o estoque está vazio;
-* opção inválida no menu;
-* entrada inválida no campo de opção do menu.
-
-Em caso de falha no `realloc`, a função de cadastro retorna um código de erro para que o `main.c` possa informar o usuário.
-
-## 6. Como compilar
-
-O projeto pode ser compilado utilizando o GCC.
-
-No terminal, dentro da pasta onde estão os arquivos, execute:
+No terminal, dentro da pasta do projeto, execute o comando (com as flags recomendadas para avisos):
 
 ```bash
-gcc -Wall -o estoque main.c produto.c
+gcc -Wall -Wextra -o estoque main.c produto.c
 ```
 
-Depois, execute o programa com:
+Em seguida, execute o programa:
 
 ```bash
 ./estoque
 ```
 
-No Windows, dependendo do ambiente utilizado, o executável poderá ser gerado como:
+### Em ambientes Windows
 
-```bash
+Abra o Prompt de Comando (CMD) ou PowerShell e compile com:
+
+```cmd
+gcc -Wall -Wextra -o estoque.exe main.c produto.c
+```
+
+Em seguida, execute o programa:
+
+```cmd
 estoque.exe
 ```
 
-e executado com:
+## 7. Como Utilizar
 
-```bash
-estoque.exe
-```
-
-## 7. Como utilizar
-
-Ao iniciar o programa, será apresentado o menu principal:
+Ao iniciar o programa, será apresentado o menu principal em modo texto:
 
 ```text
 ====================================
@@ -194,21 +153,8 @@ Ao iniciar o programa, será apresentado o menu principal:
 6 - Calcular valor total do estoque
 0 - Sair
 ====================================
-Escolha uma opção:
+Escolha uma opcao: 
 ```
 
-
-## 8. Compilação recomendada
-
-Para verificar possíveis avisos durante a compilação:
-
-```bash
-gcc -Wall -Wextra -o estoque main.c produto.c
-```
-
-A execução deve ser feita com:
-
-```bash
-./estoque
-```
+**Dica:** Sempre utilize a opção `0` para sair do programa de forma segura, garantindo que o sistema libere a memória alocada e previna *memory leaks*.
 
