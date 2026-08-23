@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include "produto.h"
 
+/* Executa o menu de gerenciamento e coordena as operacoes do estoque. */
 int main()
 {
 
+    // O vetor começa vazio e sera expandido conforme novos produtos sao cadastrados.
     Produto *produtos = NULL;
 
     int tamanho = 0;
@@ -15,6 +17,7 @@ int main()
     do
     {
 
+        // Exibe as operacoes disponiveis para o usuario.
         printf("\n====================================\n");
         printf("       GERENCIAMENTO DE ESTOQUE\n");
         printf("====================================\n");
@@ -30,6 +33,7 @@ int main()
 
         if (scanf("%d", &opcao) != 1)
         {
+            // Limpa a entrada invalida para permitir uma nova escolha.
             printf("Entrada invalida! Digite apenas numeros.\n");
 
             while (getchar() != '\n')
@@ -43,6 +47,7 @@ int main()
 
         case 1:
         {
+            // Solicita e cadastra um novo produto no estoque.
             int resultado = cadastrarProduto(&produtos, &tamanho);
 
             if (resultado == 500)
@@ -54,6 +59,7 @@ int main()
 
         case 2:
 
+            // Nao tenta remover produtos quando o estoque esta vazio.
             if (tamanho == 0)
             {
                 printf("Estoque vazio! Nenhum produto para remover.\n");
@@ -65,6 +71,7 @@ int main()
 
             int resultado1 = deletarProduto(produtos, &tamanho, idParaDeletar);
 
+            // Informa ao usuario se a remocao foi realizada.
             if (resultado1 == 1)
             {
                 printf("Produto deletado com sucesso!\n");
@@ -77,6 +84,7 @@ int main()
 
         case 3:
 
+            // Mostra todos os produtos ou informa que nao existem itens cadastrados.
             if (tamanho == 0)
             {
                 printf("Estoque vazio!\n");
@@ -90,6 +98,7 @@ int main()
 
         case 4:
 
+            // A busca so e executada quando ha produtos no vetor.
             if (tamanho == 0)
             {
                 printf("Estoque vazio! Nenhum produto para buscar.\n");
@@ -101,6 +110,7 @@ int main()
 
             int indiceEncontrado = buscarProdutoPorId(produtos, 0, tamanho - 1, idParaBuscar);
 
+            // Exibe o produto encontrado ou uma mensagem de ausencia.
             if (indiceEncontrado == -1)
             {
                 printf("Produto nao encontrado!\n");
@@ -116,6 +126,7 @@ int main()
             break;
 
         case 5:
+            // Ordena e exibe uma copia dos produtos por preco.
             ordenarProdutosPreco(&produtos, tamanho);
             /*
              * Funcao de ordenar por preco sera adicionada.
@@ -123,6 +134,7 @@ int main()
             break;
 
         case 6:
+            // Calcula e exibe o valor total do estoque.
             float resultado = somaProduto(&produtos, &tamanho);
             if (resultado != -1)
             {
@@ -132,18 +144,21 @@ int main()
 
         case 0:
 
+            // Finaliza o laco principal do programa.
             printf("Encerrando o programa...\n");
 
             break;
 
         default:
 
+            // Trata opcoes que nao existem no menu.
             printf("Opcao invalida! Escolha uma opcao do menu.\n");
 
             break;
         }
     } while (opcao != 0);
 
+    // Libera a memoria usada pelo vetor antes de encerrar.
     free(produtos);
 
     return 0;
