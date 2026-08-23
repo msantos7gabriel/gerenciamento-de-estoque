@@ -59,8 +59,7 @@ int deletarProduto(Produto *produtos, int *tamanho, int id) {
     int indiceEncontrado = -1;
 
     for (int i = 0; i < *tamanho; i++) {
-         if (produtos[i].id_produto == id) {
-            indiceEncontrado = i;
+         if (produtos[i].id_produto == id) { indiceEncontrado = i;
             break;
          }
     }
