@@ -125,12 +125,11 @@ int main()
             break;
 
         case 6:
-            /*float resultado =*/somaProduto(&produtos, &tamanho);
-            // if (resultado != -1)
-            // {
-            //     printf("Valor total dos itens do estoque: %.2fR$\n\n", resultado);
-            // }
-
+            float resultado = somaProduto(&produtos, &tamanho);
+            if (resultado != -1)
+            {
+                printf("Valor total dos itens do estoque: %.2fR$\n\n", resultado);
+            }
             break;
 
         case 0:
@@ -145,7 +144,6 @@ int main()
 
             break;
         }
-
     } while (opcao != 0);
 
     free(produtos);
