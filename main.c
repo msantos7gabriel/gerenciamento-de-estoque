@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "produto.h"
 
-int main() {
+int main()
+{
 
     Produto *produtos = NULL;
 
@@ -13,7 +14,8 @@ int main() {
     int idParaDeletar;
     int idParaBuscar;
 
-    do {
+    do
+    {
 
         printf("\n====================================\n");
         printf("       GERENCIAMENTO DE ESTOQUE\n");
@@ -28,95 +30,120 @@ int main() {
         printf("====================================\n");
         printf("Escolha uma opcao: ");
 
-        if (scanf("%d", &opcao) != 1) {
+        if (scanf("%d", &opcao) != 1)
+        {
             printf("Entrada invalida! Digite apenas numeros.\n");
 
-            while (getchar() != '\n');
+            while (getchar() != '\n')
+                ;
 
             opcao = -1;
         }
 
-        switch (opcao) {
+        switch (opcao)
+        {
 
-            case 1: {
-                int resultado = cadastrarProduto( &produtos, &tamanho, &capacidade );
+        case 1:
+        {
+            int resultado = cadastrarProduto(&produtos, &tamanho, &capacidade);
 
-                if (resultado == 500) { printf("Nao foi possivel cadastrar o produto.\n"); }
+            if (resultado == 500)
+            {
+                printf("Nao foi possivel cadastrar o produto.\n");
+            }
+            break;
+        }
+
+        case 2:
+
+            if (tamanho == 0)
+            {
+                printf("Estoque vazio! Nenhum produto para remover.\n");
                 break;
             }
 
-            case 2:
+            printf("Digite o ID do produto que deseja deletar: ");
+            scanf("%d", &idParaDeletar);
 
-                if (tamanho == 0) {
-                    printf("Estoque vazio! Nenhum produto para remover.\n");
-                    break;
-                }
+            int resultado1 = deletarProduto(produtos, &tamanho, idParaDeletar);
 
-                printf("Digite o ID do produto que deseja deletar: ");
-                scanf("%d", &idParaDeletar);
+            if (resultado1 == 1)
+            {
+                printf("Produto deletado com sucesso!\n");
+            }
+            else
+            {
+                printf("Produto nao encontrado!\n");
+            }
+            break;
 
-                int resultado1 = deletarProduto(produtos, &tamanho, idParaDeletar);
+        case 3:
 
-                if (resultado1 == 1) { printf("Produto deletado com sucesso!\n");} 
-                else { printf("Produto nao encontrado!\n"); }
+            if (tamanho == 0)
+            {
+                printf("Estoque vazio!\n");
+            }
+            else
+            {
+                printf("\n========== PRODUTOS ==========\n");
+                listarProdutos(produtos, tamanho, 0);
+            }
+            break;
+
+        case 4:
+
+            if (tamanho == 0)
+            {
+                printf("Estoque vazio! Nenhum produto para buscar.\n");
                 break;
+            }
 
-            case 3:
+            printf("Digite o ID do produto que deseja buscar: ");
+            scanf("%d", &idParaBuscar);
 
-                if (tamanho == 0) { printf("Estoque vazio!\n"); } 
-                else {
-                    printf("\n========== PRODUTOS ==========\n");
-                    listarProdutos(produtos, tamanho, 0);
-                }
-                break;
+            int indiceEncontrado = buscarProdutoPorId(produtos, 0, tamanho - 1, idParaBuscar);
 
-            case 4:
+            if (indiceEncontrado == -1)
+            {
+                printf("Produto nao encontrado!\n");
+            }
+            else
+            {
+                printf("\n========== PRODUTO ENCONTRADO ==========\n");
+                printf("ID: %d\n", produtos[indiceEncontrado].id_produto);
+                printf("Nome: %s\n", produtos[indiceEncontrado].nome);
+                printf("Preco: %.2f\n", produtos[indiceEncontrado].preco);
+                printf("Quantidade: %d\n", produtos[indiceEncontrado].quantidade);
+            }
+            break;
 
-                if (tamanho == 0) {
-                    printf("Estoque vazio! Nenhum produto para buscar.\n");
-                    break;
-                }
+        case 5:
 
-                printf("Digite o ID do produto que deseja buscar: ");
-                scanf("%d", &idParaBuscar);
+            /*
+             * Funcao de ordenar por preco sera adicionada.
+             */
+            break;
 
-                int indiceEncontrado = buscarProdutoPorId(produtos, 0,tamanho - 1,idParaBuscar);
+        case 6:
+            /*float resultado =*/somaProduto(&produtos, &tamanho);
+            // if (resultado != -1)
+            // {
+            //     printf("Valor total dos itens do estoque: %.2fR$\n\n", resultado);
+            // }
 
-                if (indiceEncontrado == -1) { printf("Produto nao encontrado!\n"); } 
-                else {
-                    printf("\n========== PRODUTO ENCONTRADO ==========\n");
-                    printf("ID: %d\n", produtos[indiceEncontrado].id_produto);
-                    printf("Nome: %s\n", produtos[indiceEncontrado].nome);
-                    printf("Preco: %.2f\n", produtos[indiceEncontrado].preco);
-                    printf("Quantidade: %d\n", produtos[indiceEncontrado].quantidade);
-                }
-                break;
+            break;
 
-            case 5:
+        case 0:
 
-                /*
-                 * Funcao de ordenar por preco sera adicionada.
-                 */
-                break;
+            printf("Encerrando o programa...\n");
 
-            case 6:
+            break;
 
-                /*
-                 * Funcao de calcular o valor total do estoque sera adicionada.
-                 */
-                break;
+        default:
 
-            case 0:
+            printf("Opcao invalida! Escolha uma opcao do menu.\n");
 
-                printf("Encerrando o programa...\n");
-
-                break;
-
-            default:
-
-                printf("Opcao invalida! Escolha uma opcao do menu.\n");
-
-                break;
+            break;
         }
 
     } while (opcao != 0);
