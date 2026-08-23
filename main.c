@@ -2,63 +2,124 @@
 #include <stdlib.h>
 #include "produto.h"
 
-int main(){
+int main() {
+
     Produto *produtos = NULL;
 
     int tamanho = 0;
     int capacidade = 0;
-    int idParaDeletar, n1, idParaBuscar, n2;
-    
 
-    cadastrarProduto(&produtos, &tamanho, &capacidade);
-    cadastrarProduto(&produtos, &tamanho, &capacidade);
-    cadastrarProduto(&produtos, &tamanho, &capacidade);
+    int opcao;
+    int idParaDeletar;
+    int idParaBuscar;
 
-    printf("\n===== PRODUTOS =====\n");
-    listarProdutos(produtos, tamanho, 0);
+    do {
 
+        printf("\n====================================\n");
+        printf("       GERENCIAMENTO DE ESTOQUE\n");
+        printf("====================================\n");
+        printf("1 - Cadastrar produto\n");
+        printf("2 - Remover produto\n");
+        printf("3 - Listar produtos\n");
+        printf("4 - Buscar produto por ID\n");
+        printf("5 - Ordenar produtos por preco\n");
+        printf("6 - Calcular valor total do estoque\n");
+        printf("0 - Sair\n");
+        printf("====================================\n");
+        printf("Escolha uma opcao: ");
 
-    printf("Deseja deletar algum produto?\n[1] para sim | [0] para nao\n");
-    scanf("%d", &n1);
+        if (scanf("%d", &opcao) != 1) {
+            printf("Entrada invalida! Digite apenas numeros.\n");
 
-    if (n1 == 1) {
-        printf("Digite o ID do produto que deseja deletar: ");
-        scanf("%d", &idParaDeletar);
+            while (getchar() != '\n');
 
-        int resultado1 = deletarProduto(produtos, &tamanho, idParaDeletar);
-
-        if (resultado1 == 1) {
-            printf("Produto deletado com sucesso!\n");
-        }   else    {
-            printf("Produto nao encontrado!\n");
+            opcao = -1;
         }
 
-        printf("\n===== PRODUTOS APOS A REMOCAO =====\n");
+        switch (opcao) {
 
-        listarProdutos(produtos, tamanho, 0);
-    }
+            case 1: {
+                int resultado = cadastrarProduto( &produtos, &tamanho, &capacidade );
 
-    printf("Deseja buscar algum produto?\n[1] para sim | [0] para nao\n");
-    scanf("%d", &n2);
+                if (resultado == 500) { printf("Nao foi possivel cadastrar o produto.\n"); }
+                break;
+            }
 
-    if (n2 == 1) {
-        printf("Digite o ID do produto que deseja buscar: ");
-        scanf("%d", &idParaBuscar);
+            case 2:
 
-        int indiceEncontrado = buscarProdutoPorId(produtos, 0, tamanho - 1, idParaBuscar);
+                if (tamanho == 0) {
+                    printf("Estoque vazio! Nenhum produto para remover.\n");
+                    break;
+                }
 
-        if(indiceEncontrado == -1) {
-            printf("Produto nao encontrado!\n");
-        } else {
-            printf("\n");
-            printf("ID: %d\n", produtos[indiceEncontrado].id_produto);
-            printf("Nome: %s\n", produtos[indiceEncontrado].nome);
-            printf("Preco: %.2f\n", produtos[indiceEncontrado].preco);
-            printf("Quantidade: %d\n", produtos[indiceEncontrado].quantidade);
-            printf("\n");
+                printf("Digite o ID do produto que deseja deletar: ");
+                scanf("%d", &idParaDeletar);
+
+                int resultado1 = deletarProduto(produtos, &tamanho, idParaDeletar);
+
+                if (resultado1 == 1) { printf("Produto deletado com sucesso!\n");} 
+                else { printf("Produto nao encontrado!\n"); }
+                break;
+
+            case 3:
+
+                if (tamanho == 0) { printf("Estoque vazio!\n"); } 
+                else {
+                    printf("\n========== PRODUTOS ==========\n");
+                    listarProdutos(produtos, tamanho, 0);
+                }
+                break;
+
+            case 4:
+
+                if (tamanho == 0) {
+                    printf("Estoque vazio! Nenhum produto para buscar.\n");
+                    break;
+                }
+
+                printf("Digite o ID do produto que deseja buscar: ");
+                scanf("%d", &idParaBuscar);
+
+                int indiceEncontrado = buscarProdutoPorId(produtos, 0,tamanho - 1,idParaBuscar);
+
+                if (indiceEncontrado == -1) { printf("Produto nao encontrado!\n"); } 
+                else {
+                    printf("\n========== PRODUTO ENCONTRADO ==========\n");
+                    printf("ID: %d\n", produtos[indiceEncontrado].id_produto);
+                    printf("Nome: %s\n", produtos[indiceEncontrado].nome);
+                    printf("Preco: %.2f\n", produtos[indiceEncontrado].preco);
+                    printf("Quantidade: %d\n", produtos[indiceEncontrado].quantidade);
+                }
+                break;
+
+            case 5:
+
+                /*
+                 * Funcao de ordenar por preco sera adicionada.
+                 */
+                break;
+
+            case 6:
+
+                /*
+                 * Funcao de calcular o valor total do estoque sera adicionada.
+                 */
+                break;
+
+            case 0:
+
+                printf("Encerrando o programa...\n");
+
+                break;
+
+            default:
+
+                printf("Opcao invalida! Escolha uma opcao do menu.\n");
+
+                break;
         }
-        
-    }
+
+    } while (opcao != 0);
 
     free(produtos);
 
