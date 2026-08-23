@@ -4,27 +4,17 @@
 
 int proximoId = 1;
 
-int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade)
+int cadastrarProduto(Produto **produtos, int *tamanho)
 {
+    Produto *temp = realloc(*produtos, (*tamanho+1) * sizeof(Produto));
 
-    if (*tamanho == *capacidade)
+    if (temp == NULL)
     {
-
-        if (*capacidade == 0)
-            *capacidade = 3;
-        else
-            *capacidade = *capacidade * 2;
-
-        Produto *temp = realloc(*produtos, *capacidade * sizeof(Produto));
-
-        if (temp == NULL)
-        {
-            printf("Erro ao alocar memoria!\n");
-            return 500;
-        }
-
-        *produtos = temp;
+        printf("Erro ao alocar memoria!\n");
+        return 500;
     }
+
+    *produtos = temp;
 
     (*produtos)[*tamanho].id_produto = proximoId;
     proximoId++;
@@ -38,10 +28,10 @@ int cadastrarProduto(Produto **produtos, int *tamanho, int *capacidade)
     printf("Digite a quantidade: ");
     scanf("%d", &(*produtos)[*tamanho].quantidade);
 
-    (*tamanho)++;
-
     printf("Produto cadastrado com sucesso!\n");
     printf("\n");
+
+    (*tamanho)++; // Operador de incremento tem ordem de precedência maior que desreferenciação
 
     return 0;
 }
