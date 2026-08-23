@@ -83,7 +83,7 @@ int deletarProduto(Produto *produtos, int *tamanho, int id)
     {
         produtos[i] = produtos[i + 1];
     }
-
+    // Realloc
     (*tamanho)--;
 
     return 1;
@@ -139,4 +139,62 @@ float somaProduto(Produto **produtos, int *tamanho)
     float soma = valor_atual + somaProduto(produtos, &novo_tamanho);
 
     return soma;
+}
+
+void ordenarProdutosPreco(Produto **produtos, int tamanho)
+{
+    if (produtos == NULL)
+    {
+        printf("Não há produtos cadastrados\n\n");
+        return;
+    }
+
+    // Criando um vetor auxiliar para não alterar os produtos na main
+    Produto *sorted_produtos = malloc(tamanho * sizeof(Produto));
+    if (sorted_produtos == NULL)
+    {
+        printf("Erro na alocação de memoria\n");
+        printf("Não foi possivel executar a função\n\n");
+        return;
+    }
+
+    // Passando todos os valores do vetor da main para o vetor local para evitar de trocar valores
+    for (int i = 0; i < tamanho; i++)
+    {
+        sorted_produtos[i] = (*produtos)[i];
+    }
+
+    // Organizando com base no valor dos produtos (Bubble Sort)
+    Produto aux; // Variável auxiliar para a troca de ordem
+    // Laco que garante que todos os elementos vao para seus devidos lugares
+    for (int i = 0; i < tamanho - 1; i++)
+    {
+        // Laço das comparações dos vizinhos
+        for (int j = 0; j < tamanho - 1; j++)
+        {
+            // Crescente = > || Decrescente = <
+            if (sorted_produtos[j].preco < sorted_produtos[j + 1].preco)
+            {
+                // Menor para o Maior
+                aux = sorted_produtos[j + 1];
+                sorted_produtos[j + 1] = sorted_produtos[j];
+                sorted_produtos[j] = aux;
+            }
+        }
+    }
+
+    // Impressão da Lista
+    printf("\n========== PRODUTOS ==========\n");
+    for (int i = 0; i < tamanho; i++)
+    {
+        printf("ID: %d\n", sorted_produtos[i].id_produto);
+        printf("Nome: %s\n", sorted_produtos[i].nome);
+        printf("Preco: %.2f\n", sorted_produtos[i].preco);
+        printf("Quantidade: %d\n", sorted_produtos[i].quantidade);
+        printf("\n");
+    }
+
+    // Liberando o vetor organizado
+    free(sorted_produtos);
+    return;
 }

@@ -118,7 +118,7 @@ int main()
             break;
 
         case 5:
-
+            ordenarProdutosPreco(&produtos, tamanho);
             /*
              * Funcao de ordenar por preco sera adicionada.
              */
