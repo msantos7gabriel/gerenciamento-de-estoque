@@ -127,7 +127,7 @@ float somaProduto(Produto **produtos, int *tamanho)
     if (*produtos == NULL)
     {
         printf("Não há produtos cadastrados para realizar o calculo\n\n");
-        return 1;
+        return -1;
     }
     if (*tamanho == 0)
     {
